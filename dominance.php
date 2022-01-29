@@ -2,7 +2,7 @@
 include __DIR__ . '/core/init.php';
 include __DIR__ . '/src/header.php';
 
-\Manager\ImportManager::importCoinList();
+\Manager\ImportManager::importCoinDominance();
 ?>
 
 <?php

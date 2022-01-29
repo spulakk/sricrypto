@@ -75,7 +75,7 @@ class Table
                 }
                 else
                 {
-                    $value = "'$value'";
+                    $value = $value === 'NULL' ? "$value" : "'$value'";
                 }
 
                 $whereArray[] = str_replace('?', $valueString ?? $value, $condition);
@@ -90,7 +90,7 @@ class Table
     }
 
 
-    public function fetchPairs(string $key, string $value, array $where = []): ?array
+    public function fetchPairs(string $key, string $value, array $where = [], ?string $order = null): ?array
     {
         $key = $this->sanitize($key);
         $value = $this->sanitize($value);
@@ -119,7 +119,7 @@ class Table
                 }
                 else
                 {
-                    $value = "'$value'";
+                    $value = $value === 'NULL' ? "$value" : "'$value'";
                 }
 
                 $whereArray[] = str_replace('?', $valueString ?? $value, $condition);
@@ -128,6 +128,28 @@ class Table
             $whereString = implode(' AND ', $whereArray);
 
             $query .= " WHERE $whereString";
+        }
+
+        if($order)
+        {
+            $direction = null;
+
+            if(str_contains($order, ' ASC'))
+            {
+                $order = str_replace(' ASC', '', $order);
+            }
+            elseif(str_contains($order, ' DESC'))
+            {
+                $order = str_replace(' DESC', '', $order);
+                $direction = 'DESC';
+            }
+
+            $query .= " ORDER BY `$order`";
+
+            if($direction)
+            {
+                $query .= " $direction";
+            }
         }
 
         $resultArray = $this->connection->query($query)->fetch_all();
@@ -230,7 +252,7 @@ class Table
                 }
                 else
                 {
-                    $value = "'$value'";
+                    $value = $value === 'NULL' ? "$value" : "'$value'";
                 }
 
                 $whereArray[] = str_replace('?', $valueString ?? $value, $condition);

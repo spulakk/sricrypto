@@ -11,10 +11,12 @@ class CoinStatDial
 
     public const V = 'volume';
 
+    public const D = 'dominance';
 
-    public static function translate(string $string): ?string
+
+    public static function translate(string $input): ?string
     {
-        switch($string)
+        switch($input)
         {
             case self::P:
                 return 'Price';
@@ -22,6 +24,8 @@ class CoinStatDial
                 return 'Market cap';
             case self::V:
                 return 'Trading volume';
+            case self::D:
+                return 'Dominance';
             default:
                 return null;
         }
